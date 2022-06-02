@@ -1,0 +1,27 @@
+p {
+    padding         : 20px;
+    font-size       : 30px;
+    background-color: black;
+    color           : white;
+    // text-align: center;
+}
+
+p span {
+
+    position  : relative;
+    animation : left 3s ease;
+    text-align: center;
+    left      : 45%;
+}
+
+@keyframes left {
+    from {
+        left            : 0%;
+        //    text-align: left;
+    }
+
+    to {
+        left         : 45%;
+        // text-align: center;
+    }
+}
