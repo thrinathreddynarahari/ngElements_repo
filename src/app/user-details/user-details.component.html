@@ -1,0 +1,170 @@
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{ display: modeldisplay }"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{Action}} User</h5>
+      </div>
+      <div class="modal-body">
+        <div class="card-text">
+          <form [formGroup]="AddForm">
+            <div class="form-group" *ngIf="Action === 'Edit'">
+              Id<label for="exampleInput1"></label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="id"
+                readonly
+              />
+            </div>
+            <div class="form-group">
+              Name<label for="exampleInput1"></label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="name"
+                id="exampleInput1"
+                [readonly]="Action === 'Edit'"
+              />
+            </div>
+            <div
+              *ngIf="
+                (AddForm.controls['name'].invalid &&
+                  AddForm.controls['name'].touched)
+              "
+              class="is-invalid"
+            >
+              Name is required.
+            </div>
+            <div class="form-group">
+              Email<label for="exampleInput1"></label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="mail"
+                [readonly]="Action === 'Edit'"
+                (input)="emailtest()"
+              />
+            </div>
+            <div
+              *ngIf="
+                AddForm.controls['mail'].invalid &&
+                AddForm.controls['mail'].touched
+              "
+              class="is-invalid"
+            >
+              <div *ngIf="AddForm.controls['mail'].errors?.required">
+                Email is required.
+              </div>
+              <div *ngIf="AddForm.get('mail')?.hasError('pattern')">Enter valid Email</div>
+            </div>
+            <div class="is-invalid" *ngIf="emailExists">Email Already Exists</div>
+
+
+            <div class="form-group">
+              Password<label for="exampleInput1"></label>
+              <input
+                type="password"
+                class="form-control form-control-sm"
+                formControlName="password"
+                minlength="8"
+                id="exampleInput1"
+
+              />
+              <!-- <i class="fa fa-eye" aria-hidden="true" *ngIf="!show"></i>
+              <i class="fa fa-eye-slash" aria-hidden="true" *ngIf="show"></i> -->
+
+            </div>
+            <!-- <div class="inner-addon right-addon">
+              <div class="input-group col-6 mx-auto">
+                <input name="password"
+                    [type]="showPassword ? 'text' : 'password'"
+                    class="form-control pwd-control"
+                    id="password-field" placeholder="Password">
+                <div>
+                  <i alt="show" class="far fa-eye eye-show"
+                  (click)="showPassword = !showPassword"
+                  [class.hide]="showPassword"></i>
+                  <i alt="hide" class="far fa-eye-slash eye-hide"
+                  (click)="showPassword = !showPassword"
+                  [class.hide]="!showPassword"></i>
+                </div>
+              </div>
+            </div> -->
+            <div
+            *ngIf="
+              AddForm.controls['password'].invalid &&
+              AddForm.controls['password'].touched
+            "
+            class="is-invalid"
+          >
+            <div *ngIf="AddForm.controls['password'].errors?.required">
+              Password is required.
+            </div>
+            <div *ngIf="AddForm.controls['password'].errors?.minlength">Password must be at least 8 characters</div>
+          </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+          (click)="closeModelDisplay()"
+        >
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" (click)="onClickSave()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <h4 class="navbar-brand">User Details</h4>
+    <button class="btn btn-primary" type="submit" (click)="onClickAdd()">
+      Add User
+    </button>
+  </div>
+</div>
+
+<div class="card-body">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="
+          let data of userData | paginate: { itemsPerPage: 10, currentPage: p } let i = index
+        "
+      >
+        <td>{{ data.id }}</td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.mail }}</td>
+        <td><button class="btn btn-success" (click)="oneditClick(data,i)"><i class="fa fa-edit"></i></button></td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+<pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+
+
+<div class="modal-backdrop show" *ngIf="modeldisplay=='block'"></div>
